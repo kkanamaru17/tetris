@@ -5,8 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>テトリス</title>
     <style>
-        canvas { border: 1px solid black; }
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        canvas { 
+            border: 1px solid black; 
+            background-color: black;
+        }
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
     </style>
 </head>
 <body>
@@ -43,6 +52,14 @@
                 playfield[row][col] = 0;
             }
         }
+
+        // Load background image
+        const backgroundImage = new Image();
+        backgroundImage.src = 'usagi.png';
+        backgroundImage.onload = () => {
+            // Start the game once the image is loaded
+            update();
+        };
 
         let tetromino = getNextTetromino();
 
@@ -112,8 +129,15 @@
         }
 
         function draw() {
-            context.fillStyle = '#000';
+            // Fill the canvas with black background
+            context.fillStyle = 'black';
             context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw background image
+            const scale = Math.min(canvas.width / backgroundImage.width, canvas.height / backgroundImage.height);
+            const x = (canvas.width / 2) - (backgroundImage.width / 2) * scale;
+            const y = (canvas.height / 2) - (backgroundImage.height / 2) * scale;
+            context.drawImage(backgroundImage, x, y, backgroundImage.width * scale, backgroundImage.height * scale);
 
             playfield.forEach((row, y) => {
                 row.forEach((value, x) => {
